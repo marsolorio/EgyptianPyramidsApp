@@ -9,7 +9,6 @@ import java.io.IOException;
 
 public class EgyptianPyramidsAppExample {
 
-  // Arrays to store pharaohs and pyramids
   protected Pharaoh[] pharaohArray;
   protected Pyramid[] pyramidArray;
   protected Set<Integer> requestedPyramids = new HashSet<>();
@@ -20,15 +19,12 @@ public class EgyptianPyramidsAppExample {
   }
 
   public EgyptianPyramidsAppExample() {
-    // File paths to JSON data
-    String pharaohFile = "path/to/pharaoh.json"; // Replace with actual path
-    String pyramidFile = "path/to/pyramid.json"; // Replace with actual path
+    String pharaohFile = "path/to/pharaoh.json"; // Update with actual file path
+    String pyramidFile = "path/to/pyramid.json"; // Update with actual file path
 
-    // Load JSON arrays from files
     JSONArray pharaohJSONArray = readJSONArray(pharaohFile);
     JSONArray pyramidJSONArray = readJSONArray(pyramidFile);
 
-    // Initialize arrays
     initializePharaoh(pharaohJSONArray);
     initializePyramid(pyramidJSONArray);
   }
@@ -37,22 +33,19 @@ public class EgyptianPyramidsAppExample {
     Scanner scan = new Scanner(System.in);
     Character command = '_';
 
-    // Main loop until user enters 'q' to quit
     while (command != 'q') {
-      printMenu(); // Display menu
+      printMenu();
       System.out.print("Enter a command: ");
       command = menuGetCommand(scan);
 
-      // Execute command and exit if 'q' is entered
       if (!executeCommand(scan, command)) {
-        break; // Exit loop if executeCommand returns false
+        break;
       }
     }
-    scan.close(); // Close scanner when done
+    scan.close();
     System.out.println("Thank you for using Nassef's Egyptian Pyramid App!");
   }
 
-  // Read JSON file and return as JSONArray
   private JSONArray readJSONArray(String filePath) {
     try (FileReader reader = new FileReader(filePath)) {
       JSONParser parser = new JSONParser();
@@ -63,7 +56,6 @@ public class EgyptianPyramidsAppExample {
     }
   }
 
-  // Initialize pharaohArray from JSON data
   private void initializePharaoh(JSONArray pharaohJSONArray) {
     pharaohArray = new Pharaoh[pharaohJSONArray.size()];
 
@@ -82,7 +74,6 @@ public class EgyptianPyramidsAppExample {
     }
   }
 
-  // Initialize pyramidArray from JSON data
   private void initializePyramid(JSONArray pyramidJSONArray) {
     pyramidArray = new Pyramid[pyramidJSONArray.size()];
 
@@ -103,18 +94,15 @@ public class EgyptianPyramidsAppExample {
     }
   }
 
-  // Convert JSON field to Integer
   private Integer toInteger(JSONObject o, String key) {
     return Integer.parseInt(o.get(key).toString());
   }
 
-  // Get first character of user input for menu command
   private static Character menuGetCommand(Scanner scan) {
     String rawInput = scan.nextLine();
     return rawInput.isEmpty() ? '_' : rawInput.toLowerCase().charAt(0);
   }
 
-  // Execute menu command
   private Boolean executeCommand(Scanner scan, Character command) {
     switch (command) {
       case '1':
@@ -122,21 +110,22 @@ public class EgyptianPyramidsAppExample {
         break;
       case 'q':
         System.out.println("Exiting the application...");
-        return false; // Set to false to exit main loop
+        return false;
       default:
         System.out.println("ERROR: Unknown command");
     }
     return true;
   }
 
-  // Print all pharaohs
+  // Lists all pharaohs by calling the print method on each Pharaoh object
   private void printAllPharaohs() {
+    System.out.println("\n--- List of All Pharaohs ---");
     for (Pharaoh pharaoh : pharaohArray) {
       pharaoh.print();
+      System.out.println(); // Blank line between each pharaoh for readability
     }
   }
 
-  // Print menu commands
   private static void printMenu() {
     System.out.println("\n--- Egyptian Pyramids App Menu ---");
     System.out.printf("1\t\tList all pharaohs\n");
@@ -162,46 +151,9 @@ class Pharaoh {
     this.hieroglyphic = hieroglyphic;
   }
 
-  public Integer getId() {
-    return id;
-  }
-
+  // Prints all details of the pharaoh
   public void print() {
-    System.out.printf("Pharaoh ID: %d\nName: %s\nReign: %d - %d B.C.\nContribution: %d\nHieroglyphic: %s\n",
+    System.out.printf("Pharaoh ID: %d\nName: %s\nReign: %d - %d B.C.\nContribution: %d gold\nHieroglyphic: %s\n",
         id, name, begin, end, contribution, hieroglyphic);
-  }
-}
-
-// Pyramid class to represent individual pyramid data
-class Pyramid {
-  private Integer id;
-  private String name;
-  private String[] contributors;
-
-  public Pyramid(Integer id, String name, String[] contributors) {
-    this.id = id;
-    this.name = name;
-    this.contributors = contributors;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String[] getContributors() {
-    return contributors;
-  }
-
-  public void print() {
-    System.out.println("Pyramid ID: " + id);
-    System.out.println("Name: " + name);
-    System.out.println("Contributors:");
-    for (String contributor : contributors) {
-      System.out.println(" - " + contributor);
-    }
   }
 }
