@@ -11,7 +11,7 @@ public class EgyptianPyramidsAppExample {
 
   protected Pharaoh[] pharaohArray;
   protected Pyramid[] pyramidArray;
-  protected Set<Integer> requestedPyramids = new HashSet<>();
+  protected Set<Integer> requestedPyramids = new HashSet<>(); // To track unique pyramid requests
 
   public static void main(String[] args) {
     EgyptianPyramidsAppExample app = new EgyptianPyramidsAppExample();
@@ -108,6 +108,18 @@ public class EgyptianPyramidsAppExample {
       case '1':
         printAllPharaohs();
         break;
+      case '2':
+        displaySpecificPharaoh(scan);
+        break;
+      case '3':
+        printAllPyramids();
+        break;
+      case '4':
+        displaySpecificPyramid(scan);
+        break;
+      case '5':
+        reportUniquePyramids();
+        break;
       case 'q':
         System.out.println("Exiting the application...");
         return false;
@@ -117,7 +129,7 @@ public class EgyptianPyramidsAppExample {
     return true;
   }
 
-  // Lists all pharaohs by calling the print method on each Pharaoh object
+  // List all pharaohs
   private void printAllPharaohs() {
     System.out.println("\n--- List of All Pharaohs ---");
     for (Pharaoh pharaoh : pharaohArray) {
@@ -126,14 +138,64 @@ public class EgyptianPyramidsAppExample {
     }
   }
 
+  // Display information for a specific pharaoh
+  private void displaySpecificPharaoh(Scanner scan) {
+    System.out.print("Enter Pharaoh ID: ");
+    int id = Integer.parseInt(scan.nextLine().trim());
+
+    for (Pharaoh pharaoh : pharaohArray) {
+      if (pharaoh.getId() == id) {
+        pharaoh.print();
+        return;
+      }
+    }
+    System.out.println("ERROR: Pharaoh not found");
+  }
+
+  // Command 3: List all pyramids and contributors
+  private void printAllPyramids() {
+    System.out.println("\n--- List of All Pyramids and Their Contributors ---");
+    for (Pyramid pyramid : pyramidArray) {
+      pyramid.print();
+      System.out.println(); // Blank line between each pyramid for readability
+    }
+  }
+
+  // Command 4: Display information for a specific pyramid
+  private void displaySpecificPyramid(Scanner scan) {
+    System.out.print("Enter Pyramid ID: ");
+    int id = Integer.parseInt(scan.nextLine().trim());
+    requestedPyramids.add(id); // Add to unique requests set
+
+    for (Pyramid pyramid : pyramidArray) {
+      if (pyramid.getId() == id) {
+        pyramid.print();
+        return;
+      }
+    }
+    System.out.println("ERROR: Pyramid not found");
+  }
+
+  // Command 5: Report unique requested pyramids
+  private void reportUniquePyramids() {
+    System.out.println("\n--- Unique Requested Pyramids ---");
+    for (Integer id : requestedPyramids) {
+      System.out.println("Requested Pyramid ID: " + id);
+    }
+  }
+
   private static void printMenu() {
     System.out.println("\n--- Egyptian Pyramids App Menu ---");
     System.out.printf("1\t\tList all pharaohs\n");
+    System.out.printf("2\t\tDisplay specific pharaoh information\n");
+    System.out.printf("3\t\tList all pyramids and contributors\n");
+    System.out.printf("4\t\tDisplay specific pyramid information\n");
+    System.out.printf("5\t\tReport requested pyramids without duplicates\n");
     System.out.printf("q\t\tQuit\n");
   }
 }
 
-// Pharaoh class to represent individual pharaoh data
+// Pharaoh class
 class Pharaoh {
   private Integer id;
   private String name;
@@ -151,9 +213,46 @@ class Pharaoh {
     this.hieroglyphic = hieroglyphic;
   }
 
-  // Prints all details of the pharaoh
+  public Integer getId() {
+    return id;
+  }
+
   public void print() {
     System.out.printf("Pharaoh ID: %d\nName: %s\nReign: %d - %d B.C.\nContribution: %d gold\nHieroglyphic: %s\n",
         id, name, begin, end, contribution, hieroglyphic);
+  }
+}
+
+// Pyramid class
+class Pyramid {
+  private Integer id;
+  private String name;
+  private String[] contributors;
+
+  public Pyramid(Integer id, String name, String[] contributors) {
+    this.id = id;
+    this.name = name;
+    this.contributors = contributors;
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String[] getContributors() {
+    return contributors;
+  }
+
+  public void print() {
+    System.out.println("Pyramid ID: " + id);
+    System.out.println("Name: " + name);
+    System.out.println("Contributors:");
+    for (String contributor : contributors) {
+      System.out.println(" - " + contributor);
+    }
   }
 }
